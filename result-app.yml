@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result-app-deployment
+  labels:
+    name: result-app-pod
+    app: demo-voting-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: result-app-pod
+      app: demo-voting-app
+  template:
+   metadata:
+    name: result-app-pod
+    labels:
+      name: result-app-pod
+      app: demo-voting-app
+   spec:
+    containers:
+      - name: nodejs
+        image: dockersamples/examplevotingapp_result
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1 
+kind: Service 
+metadata:
+ name: resultapp-service
+ labels:
+    name: resultapp-service
+    app: demo-voting-app
+spec: 
+  type: LoadBalancer
+  selector:
+   name: result-app-pod
+   app: demo-voting-app
+  ports: 
+  - port: 80
+    targetPort: 80
